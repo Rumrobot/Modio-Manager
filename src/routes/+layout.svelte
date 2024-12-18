@@ -51,7 +51,7 @@
       class="pointer-events-none justify-self-center text-sm text-muted"
       data-tauri-drag-region
     >
-      Modio Manager
+      Mod.io Manager
     </p>
     <div
       class="col-span-2 flex h-full items-center justify-self-end"
