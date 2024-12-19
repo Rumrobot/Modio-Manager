@@ -20,13 +20,13 @@
 <Button
   type="button"
   onclick={(e) => {
-		onclick?.(e);
-		sidebar.toggle();
-	}}
+    onclick?.(e);
+    sidebar.toggle();
+  }}
   data-sidebar="trigger"
   variant="ghost"
   size="icon"
-  class={cn("h-7 w-7", className)}
+  class={cn('h-7 w-7', className)}
   {...restProps}
 >
   <Menu />

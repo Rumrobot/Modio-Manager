@@ -4,12 +4,7 @@
   import { Toaster } from '$lib/components/ui/sonner';
   import { getCurrentWindow } from '@tauri-apps/api/window';
   import { Button } from '$components/ui/button';
-  import {
-    Fullscreen,
-    FullscreenExit,
-    Close,
-    Remove,
-  } from '@o7/icon/material';
+  import { Fullscreen, FullscreenExit, Close, Minimize } from '@o7/icon/material';
   import { RefreshCcw } from '@o7/icon/lucide';
   import { onMount } from 'svelte';
   import * as Sidebar from '$components/ui/sidebar';
@@ -36,19 +31,19 @@
 <Sidebar.Provider>
   <AppSidebar />
   <div
-    class="fixed top-0 grid h-12 w-full grid-cols-5 items-center justify-between border-b bg-background/75 backdrop-blur"
+    class="bg-background/75 fixed top-0 grid h-12 w-full grid-cols-5 items-center justify-between border-b backdrop-blur"
     data-tauri-drag-region
   >
     <div class="col-span-2 ml-2 flex items-center gap-1" data-tauri-drag-region>
-      <Sidebar.Trigger class="h-10 w-10" />
+      <Sidebar.Trigger class="h-10 w-10 " />
       <Button variant="ghost" size="icon" onclick={() => (reload = true)}>
         <RefreshCcw
-          class={`animate-spin ease-in direction-reverse repeat-1 ${reload ? 'running' : 'paused'}`}
+          class={`direction-reverse repeat-1 animate-spin ease-in ${reload ? 'running' : 'paused'}`}
         />
       </Button>
     </div>
     <p
-      class="pointer-events-none justify-self-center text-sm text-muted"
+      class="text-muted pointer-events-none justify-self-center text-sm"
       data-tauri-drag-region
     >
       Mod.io Manager
@@ -57,14 +52,14 @@
       class="col-span-2 flex h-full items-center justify-self-end"
       data-tauri-drag-region
     >
-      <div class="h-full w-[1px] bg-border"></div>
-      <div class="flex h-full text-muted">
+      <div class="bg-border h-full w-[1px]"></div>
+      <div class="text-muted flex h-full">
         <Button
           variant="ghost"
           class="h-full rounded-none px-4"
           onclick={() => Window.minimize()}
         >
-          <Remove size={18} />
+          <Minimize size={18} />
         </Button>
         <Button
           variant="ghost"
@@ -79,7 +74,7 @@
         </Button>
         <Button
           variant="ghost"
-          class="h-full rounded-none px-4 hover:bg-destructive"
+          class="hover:bg-destructive h-full rounded-none px-4"
           onclick={() => Window.close()}
         >
           <Close size={18} />
@@ -88,7 +83,7 @@
     </div>
   </div>
 
-  <div class="mt-12">
+  <div class="mt-12 w-full">
     {@render children()}
   </div>
 </Sidebar.Provider>

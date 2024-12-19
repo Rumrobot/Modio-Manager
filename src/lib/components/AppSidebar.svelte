@@ -4,24 +4,24 @@
   const items = [
     {
       title: 'Home',
-      url: '#'
+      url: '#',
     },
     {
       title: 'Inbox',
-      url: '#'
+      url: '#',
     },
     {
       title: 'Calendar',
-      url: '#'
+      url: '#',
     },
     {
       title: 'Search',
-      url: '#'
+      url: '#',
     },
     {
       title: 'Settings',
-      url: '#'
-    }
+      url: '#',
+    },
   ];
 </script>
 
