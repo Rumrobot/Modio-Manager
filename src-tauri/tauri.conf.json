@@ -13,8 +13,7 @@
     "windows": [
       {
         "title": "Modio Manager",
-        "decorations": false,
-        "transparent": true
+        "decorations": false
       }
     ],
     "security": {
