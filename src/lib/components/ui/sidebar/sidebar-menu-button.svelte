@@ -31,7 +31,7 @@
 
 <script lang="ts">
   import * as Tooltip from '$components/ui/tooltip/index.js';
-  import { cn } from '$lib/utils.js';
+  import { cn } from '$lib/utils';
   import {
     mergeProps,
     type WithElementRef,

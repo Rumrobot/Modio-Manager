@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Button } from '$components/ui/button/index.js';
-  import { cn } from '$lib/utils.js';
+  import { cn } from '$lib/utils';
   import { Menu } from '@o7/icon/material';
   import type { ComponentProps } from 'svelte';
   import { useSidebar } from './context.svelte.js';

@@ -9,11 +9,14 @@
   import { onMount } from 'svelte';
   import * as Sidebar from '$components/ui/sidebar';
   import { AppSidebar } from '$lib/components';
+  import { loadApp } from '$lib/utils';
 
   const { children } = $props();
   const Window = getCurrentWindow();
   let maximized = $state(false);
   let reload = $state(false);
+
+  loadApp();
 
   const resize = async () => {
     maximized = await Window.isMaximized();
