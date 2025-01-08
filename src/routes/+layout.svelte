@@ -5,16 +5,17 @@
   import { getCurrentWindow } from '@tauri-apps/api/window';
   import { Button } from '$components/ui/button';
   import { Fullscreen, FullscreenExit, Close, Minimize } from '@o7/icon/material';
-  import { RefreshCcw } from '@o7/icon/lucide';
+  import { Loader } from '@o7/icon/lucide';
   import { onMount } from 'svelte';
   import * as Sidebar from '$components/ui/sidebar';
   import { AppSidebar } from '$lib/components';
   import { loadApp } from '$lib/utils';
+  import { appState } from '$lib/state.svelte';
+  import { Input } from '$components/ui/input';
 
   const { children } = $props();
   const Window = getCurrentWindow();
   let maximized = $state(false);
-  let reload = $state(false);
 
   loadApp();
 
@@ -39,11 +40,6 @@
   >
     <div class="col-span-2 ml-2 flex items-center gap-1" data-tauri-drag-region>
       <Sidebar.Trigger class="h-10 w-10 " />
-      <Button variant="ghost" size="icon" onclick={() => (reload = true)}>
-        <RefreshCcw
-          class={`direction-reverse repeat-1 animate-spin ease-in ${reload ? 'running' : 'paused'}`}
-        />
-      </Button>
     </div>
     <p
       class="text-muted pointer-events-none justify-self-center text-sm"
@@ -87,6 +83,34 @@
   </div>
 
   <div class="mt-12 w-full">
-    {@render children()}
+    {#if appState.loading}
+      <div class="state-container text-muted">
+        <Loader class="animate-spin" />
+        <p class="animate-pulse">
+          {appState.message}...
+        </p>
+      </div>
+    {:else}
+      {#if appState.status === "error.token.null"}
+        <div class="state-container">
+          Mod.io API token
+          <div class="flex gap-1">
+            <Input placeholder="Token" />
+            <Button>Save</Button>
+          </div>
+        </div>
+      {:else if appState.status.startsWith('error')}
+        <div class="state-container">
+          <h2>Error</h2>
+          {appState.message}
+        </div>
+      {:else if appState.firstLaunch}
+        <div class="state-container">
+          First time
+        </div>
+      {:else}
+        {@render children()}
+      {/if}
+    {/if}
   </div>
 </Sidebar.Provider>

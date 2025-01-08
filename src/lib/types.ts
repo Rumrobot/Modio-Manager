@@ -1,15 +1,12 @@
-export const TagType = ['map', 'mod', 'gamemode'] as const;
+import { z } from 'zod';
+import type { configSchema } from './zod';
 
-export type Mod = {
-  title: string;
-  imageUrl: string;
-  modUrl: string;
-  type: (typeof TagType)[number];
-  modioVersion?: number;
-  localVersion?: number;
-  subscribed: boolean;
-  corrupted: boolean;
-  infected: boolean;
-};
+export interface AppState {
+  status: string;
+  loading: boolean;
+  message: string | null;
+  // queue:
+  firstLaunch: boolean;
+}
 
-export type LocalMod = Pick<Mod, 'localVersion' | 'corrupted'>;
+export type AppConfig = z.infer<typeof configSchema>;

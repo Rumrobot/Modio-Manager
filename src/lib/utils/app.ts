@@ -1,9 +1,11 @@
-import { config } from './config';
+import { config } from '../config.svelte';
+import { appState } from '$lib/state.svelte';
 
 export const loadApp = async () => {
-  console.log('Loading...');
+  console.log('Initializing app');
 
-  await config.load();
+  if (!(await config.load())) return (appState.loading = false);
+  // Check token
 
-  console.log('Loaded');
+  appState.loading = false;
 };

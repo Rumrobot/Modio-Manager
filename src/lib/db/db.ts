@@ -1,6 +1,6 @@
 import { appDataDir } from '@tauri-apps/api/path';
 import Database from '@tauri-apps/plugin-sql';
-import { Kysely, Migrator } from 'kysely';
+import { Kysely, Migrator, ParseJSONResultsPlugin } from 'kysely';
 import { TauriSqliteDialect } from 'kysely-dialect-tauri';
 import type { DB } from './types';
 import { Migrations } from '$lib/db/migrations';
@@ -10,6 +10,7 @@ export const db = new Kysely<DB>({
     database: async (prefix) =>
       Database.load(`${prefix}${await appDataDir()}config.db`),
   }),
+  plugins: [new ParseJSONResultsPlugin()],
 });
 
 export const migrateToLatest = async () => {

@@ -7,19 +7,17 @@ const migrations: Record<string, Migration> = {
         .createTable('config')
         .addColumn('id', 'integer', (col) => col.autoIncrement().primaryKey())
         .addColumn('data', 'json')
-        .ifNotExists()
         .execute();
 
-      if (!(await db.selectFrom('config').select('data').executeTakeFirst())) {
-        await db
-          .insertInto('config')
-          .values({
-            data: {
-              token: null,
-            },
-          })
-          .execute();
-      }
+      await db
+        .insertInto('config')
+        .values({
+          data: {
+            token: null,
+          },
+        })
+        .returningAll()
+        .executeTakeFirstOrThrow();
     },
 
     down: async function (db: Kysely<any>): Promise<void> {
