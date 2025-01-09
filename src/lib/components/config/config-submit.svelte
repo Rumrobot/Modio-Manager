@@ -4,6 +4,8 @@ import type { AppConfig } from '$lib/types';
 import { getContext } from 'svelte';
 
 let data = getContext("data");
+let errors = getContext("errors");
+
 
 
 </script>

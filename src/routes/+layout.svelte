@@ -25,6 +25,7 @@
   let tokenTest = $derived(configSchema.safeParse({ ...config.appConfig, token }));
   let tokenErrors = $derived(tokenTest.success || !token ? [] : tokenTest.error?.issues.filter(issue => issue.path[0] === 'token'));
 
+
   loadApp();
 
   const resize = async () => {

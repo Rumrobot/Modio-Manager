@@ -1,6 +1,6 @@
-import Root from './config-content.svelte';
-import Input from './config-input.svelte';
-import Button from './config-button.svelte';
+import Root from './config.svelte';
+import Input from './config-field_errors.svelte';
+import Button from './config-submit.svelte';
 
 export default Root;
 export {
