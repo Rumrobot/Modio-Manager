@@ -1,7 +1,8 @@
-<script>
+<script lang="ts">
   import '../app.pcss';
   import { ModeWatcher } from 'mode-watcher';
   import { Toaster } from '$lib/components/ui/sonner';
+  import { toast } from 'svelte-sonner';
   import { getCurrentWindow } from '@tauri-apps/api/window';
   import { Button } from '$components/ui/button';
   import { Fullscreen, FullscreenExit, Close, Minimize } from '@o7/icon/material';
@@ -11,11 +12,18 @@
   import { AppSidebar } from '$lib/components';
   import { loadApp } from '$lib/utils';
   import { appState } from '$lib/state.svelte';
+  import { config } from '$lib/config.svelte';
   import { Input } from '$components/ui/input';
+  import { Status } from '$lib/types';
+  import { configSchema } from '$lib/zod';
 
   const { children } = $props();
   const Window = getCurrentWindow();
   let maximized = $state(false);
+
+  let token: string | undefined = $state(undefined);
+  let tokenTest = $derived(configSchema.safeParse({ ...config.appConfig, token }));
+  let tokenErrors = $derived(tokenTest.success || !token ? [] : tokenTest.error?.issues.filter(issue => issue.path[0] === 'token'));
 
   loadApp();
 
@@ -83,7 +91,7 @@
   </div>
 
   <div class="mt-12 w-full">
-    {#if appState.loading}
+    {#if appState.status === Status.LOADING}
       <div class="state-container text-muted">
         <Loader class="animate-spin" />
         <p class="animate-pulse">
@@ -91,20 +99,33 @@
         </p>
       </div>
     {:else}
-      {#if appState.status === "error.token.null"}
+      {#if appState.status === Status.NO_TOKEN}
         <div class="state-container">
           Mod.io API token
-          <div class="flex gap-1">
-            <Input placeholder="Token" />
-            <Button>Save</Button>
+          <div class="flex gap-2">
+            <Input placeholder="Token" bind:value={token} class={`${tokenTest.success || !token ? "" : "!ring-destructive"}`} />
+            <Button disabled={!tokenTest.success} onclick={async () => {
+              const result = await config.set({token});
+              if (result) {
+                toast.success("Saved Mod.io token");
+                appState.status = Status.LOADED;
+              } else {
+                toast.success("Filed to save Mod.io token");
+              }
+            }}>Save
+            </Button>
           </div>
+          {#if tokenErrors.length > 0}
+            <div class="text-destructive italic">
+              <ul>
+                {#each tokenErrors as error}
+                  <li>{error.message}</li>
+                {/each}
+              </ul>
+            </div>
+          {/if}
         </div>
-      {:else if appState.status.startsWith('error')}
-        <div class="state-container">
-          <h2>Error</h2>
-          {appState.message}
-        </div>
-      {:else if appState.firstLaunch}
+      {:else if appState.status === Status.FIRST_LAUNCH}
         <div class="state-container">
           First time
         </div>

@@ -1,8 +1,15 @@
 import { z } from 'zod';
 import type { configSchema } from './zod';
 
+export enum Status {
+  NO_TOKEN,
+  LOADING,
+  FIRST_LAUNCH,
+  LOADED
+}
+
 export interface AppState {
-  status: string;
+  status: Status;
   loading: boolean;
   message: string | null;
   // queue:

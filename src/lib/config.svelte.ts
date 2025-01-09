@@ -1,5 +1,5 @@
 import { db, migrateToLatest } from './db';
-import type { AppConfig } from '$lib/types';
+import { type AppConfig, Status } from '$lib/types';
 import { appState } from '$lib/state.svelte';
 import { doesTableExist } from '$lib/utils/db';
 import { configSchema } from '$lib/zod';
@@ -12,14 +12,29 @@ const getConfig = async () => {
 class Config {
   appConfig: AppConfig | null = $state(null);
 
+  async set(data: Partial<AppConfig>) {
+    const test = configSchema.safeParse({ ...this.appConfig, ...data });
+
+    if (test.success) {
+      this.appConfig = test.data;
+      const result = await db
+        .updateTable('config')
+        .set('data', test.data)
+        .execute();
+
+      return !!result;
+    } else {
+      return false;
+    }
+  }
+
   async load() {
     console.log('Loading config');
-    appState.status = 'loading.config';
+    appState.status = Status.LOADING;
     appState.message = 'Loading config';
 
     if (!(await doesTableExist('config')) || !(await getConfig())) {
       appState.firstLaunch = true;
-      appState.status = 'loading.config.initializing';
       console.log('Initializing config');
 
       await migrateToLatest();
@@ -35,7 +50,7 @@ class Config {
     }
 
     if (!this.appConfig?.token) {
-      appState.status = 'error.token.null';
+      appState.status = Status.NO_TOKEN;
       return false;
     }
 
