@@ -12,12 +12,7 @@
 </script>
 
 <Sidebar.Root bind:ref {collapsible} {...restProps} class="pt-(--header-height)">
-  <Sidebar.Header>
-    <p class="overflow-hidden">
-      Header
-    </p>
-  </Sidebar.Header>
-  <Sidebar.Content class="!overflow-hidden">
+  <Sidebar.Content>
     <GameMenu />
   </Sidebar.Content>
   <Sidebar.Footer>

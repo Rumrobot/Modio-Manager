@@ -5,7 +5,7 @@
   import { useSidebar } from '$components/ui/sidebar';
   import { ChevronsUpDown, Settings, Sun, Moon } from '@o7/icon/lucide';
   import { toggleMode } from 'mode-watcher';
-  import { Button } from '$components/ui/button';
+  import { goto } from '$app/navigation';
 
   const sidebar = useSidebar();
 </script>
@@ -24,7 +24,7 @@
               <Avatar.Image
                 src="https://getwallpapers.com/wallpaper/full/1/e/4/890298-full-size-shrek-wallpapers-2560x1440.jpg" />
               alt="Shrek" />
-              <Avatar.Fallback class="rounded-lg">NA</Avatar.Fallback>
+              <Avatar.Fallback class="rounded-lg">N/A</Avatar.Fallback>
             </Avatar.Root>
             <div class="grid flex-1 text-left text-sm leading-tight">
               <span class="truncate font-semibold">Shrek</span>
@@ -46,7 +46,7 @@
               <Avatar.Image
                 src="https://getwallpapers.com/wallpaper/full/1/e/4/890298-full-size-shrek-wallpapers-2560x1440.jpg" />
               alt="Shrek" />
-              <Avatar.Fallback class="rounded-lg">NA</Avatar.Fallback>
+              <Avatar.Fallback class="rounded-lg">N/A</Avatar.Fallback>
             </Avatar.Root>
             <div class="grid flex-1 text-left text-sm leading-tight">
               <span class="truncate font-semibold">Shrek</span>
@@ -56,16 +56,16 @@
         </DropdownMenu.Label>
         <DropdownMenu.Separator />
         <DropdownMenu.Group>
-        <DropdownMenu.GroupHeading class="text-muted-foreground text-xs">App</DropdownMenu.GroupHeading>
-        <DropdownMenu.Item class="gap-2 p-2" onSelect={toggleMode} closeOnSelect={false}>
-          <Sun class="dark:hidden" />
-          <Moon class="hidden dark:block" />
-          Theme
-        </DropdownMenu.Item>
-        <DropdownMenu.Item class="gap-2 p-2">
-          <Settings />
-          Settings
-        </DropdownMenu.Item>
+          <DropdownMenu.GroupHeading class="text-muted-foreground text-xs">App</DropdownMenu.GroupHeading>
+          <DropdownMenu.Item class="gap-2 p-2" onSelect={toggleMode} closeOnSelect={false}>
+            <Sun class="dark:hidden" />
+            <Moon class="hidden dark:block" />
+            Theme
+          </DropdownMenu.Item>
+            <DropdownMenu.Item class="gap-2 p-2" onclick={() => goto("/settings")}>
+              <Settings />
+              Settings
+            </DropdownMenu.Item>
         </DropdownMenu.Group>
       </DropdownMenu.Content>
     </DropdownMenu.Root>

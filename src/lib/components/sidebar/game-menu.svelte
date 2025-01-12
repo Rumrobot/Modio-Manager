@@ -1,23 +1,32 @@
 <script lang="ts">
   import * as Sidebar from '$components/ui/sidebar';
   import * as Avatar from '$components/ui/avatar';
-  import * as DropdownMenu from '$components/ui/dropdown-menu';
   import * as Collapsible from '$components/ui/collapsible';
-  import { useSidebar } from '$components/ui/sidebar';
   import { ChevronRight } from '@o7/icon/lucide';
 
-  const sidebar = useSidebar();
-
-  const games = [
+  const games: {
+    title: string;
+    url: string;
+    icon: string;
+    isActive?: boolean;
+    items?: {
+      title: string;
+      url: string;
+    }[];
+  }[] = [
     {
       title: 'Pavlov',
       url: 'pavlov',
-      icon: 'https://thumb.modcdn.io/games/806d/3959/crop_64x64/icon.png'
+      icon: 'https://thumb.modcdn.io/games/806d/3959/crop_64x64/icon.png',
+      items: [{
+        title: 'Server list',
+        url: 'pavlov/serverlist'
+      }]
     }
   ];
 </script>
 
-<Sidebar.Group class="group-data-[collapsible=icon]:hidden">
+<Sidebar.Group>
   <Sidebar.GroupLabel>Games</Sidebar.GroupLabel>
   <Sidebar.GroupContent>
     <Sidebar.Menu>
@@ -27,13 +36,16 @@
             <Sidebar.MenuItem {...props}>
               <Collapsible.Trigger>
                 {#snippet child({ props })}
-                  <Sidebar.MenuButton {...props}>
+                  <Sidebar.MenuButton {...props} size="lg">
                     {#snippet tooltipContent()}
                       {game.title}
                     {/snippet}
-                    {#if game.icon}
-                      <game.icon />
-                    {/if}
+                    <Avatar.Root class="h-8 w-8 rounded-lg">
+                      <Avatar.Image
+                        src={game.icon} />
+                      alt={`${game.title} icon`} />
+                      <Avatar.Fallback class="rounded-md">N/A</Avatar.Fallback>
+                    </Avatar.Root>
                     <span>{game.title}</span>
                     <ChevronRight
                       class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"

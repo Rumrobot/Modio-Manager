@@ -5,7 +5,8 @@ export enum Status {
   NO_TOKEN,
   LOADING,
   FIRST_LAUNCH,
-  LOADED
+  LOADED,
+  INVALID_TOKEN,
 }
 
 export interface AppState {

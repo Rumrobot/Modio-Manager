@@ -4,11 +4,10 @@
   import * as Form from '$components/ui/form';
   import { ModeWatcher } from 'mode-watcher';
   import { Toaster } from '$lib/components/ui/sonner';
-  import { toast } from 'svelte-sonner';
   import { getCurrentWindow } from '@tauri-apps/api/window';
   import { Button } from '$components/ui/button';
   import { Fullscreen, FullscreenExit, Close, Minimize } from '@o7/icon/material';
-  import { Loader } from '@o7/icon/lucide';
+  import { Eye, EyeOff, Loader } from '@o7/icon/lucide';
   import { onMount } from 'svelte';
   import { AppSidebar } from '$lib/components/sidebar';
   import { loadApp } from '$lib/utils';
@@ -19,24 +18,25 @@
   import { configSchema } from '$lib/zod';
   import { defaults, superForm } from 'sveltekit-superforms';
   import { zod } from 'sveltekit-superforms/adapters';
+  import { saveForm } from '$lib/utils/app';
 
   const { children } = $props();
   const Window = getCurrentWindow();
   let maximized = $state(false);
+  let showToken = $state(false);
 
   loadApp();
 
   const form = superForm(defaults(zod(configSchema)), {
     SPA: true,
     validators: zod(configSchema),
-    onUpdate({ form }) {
-      if (form.valid) {
-        console.log(formData);
-        // TODO: Call an external API with form.data, await the result and update form
-      }
+    id: 'layout',
+    async onUpdate({ form }) {
+      await saveForm(form);
     }
   });
-  const { form: formData, enhance } = form;
+
+  const { form: formData, enhance, errors, delayed } = form;
 
   const resize = async () => {
     maximized = await Window.isMaximized();
@@ -113,20 +113,34 @@
           </p>
         </div>
       {:else}
-        {#if appState.status === Status.NO_TOKEN}
+        {#if appState.status === Status.NO_TOKEN || Status.INVALID_TOKEN}
           <div class="state-container">
+            {#if appState.status === Status.INVALID_TOKEN}
+              <p class="text-destructive">Invalid Mod.io token</p>
+            {/if}
             <form method="POST" use:enhance>
               <Form.Field {form} name="token">
                 <Form.Control>
                   {#snippet children({ props })}
                     <Form.Label>Mod.io token</Form.Label>
-                    <Input {...props} bind:value={$formData.token} />
+                    <div class="relative">
+                      <Input {...props} bind:value={$formData.token}
+                             placeholder="Mod.io token" type={showToken ? 'text' : 'password'} />
+                      <Button onclick={() => showToken = !showToken} variant="ghost"
+                              class="w-8 h-8 p-0 absolute m-1 top-0 right-0 bg-background">
+                        {#if showToken}
+                          <Eye />
+                        {:else }
+                          <EyeOff />
+                        {/if}
+                      </Button>
+                    </div>
                   {/snippet}
                 </Form.Control>
                 <Form.Description>This is your personal Mod.io API token.</Form.Description>
                 <Form.FieldErrors />
+                <Form.Button disabled={$formData === config.appConfig || !!$errors.token || $delayed}>Save</Form.Button>
               </Form.Field>
-              <Form.Button>Save</Form.Button>
             </form>
           </div>
         {:else if appState.status === Status.FIRST_LAUNCH}
