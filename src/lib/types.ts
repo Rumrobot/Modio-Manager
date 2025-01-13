@@ -2,7 +2,6 @@ import { z } from 'zod';
 import type { configSchema } from './zod';
 
 export enum Status {
-  NO_TOKEN,
   LOADING,
   FIRST_LAUNCH,
   LOADED,

@@ -113,10 +113,10 @@
           </p>
         </div>
       {:else}
-        {#if appState.status === Status.NO_TOKEN || Status.INVALID_TOKEN}
+        {#if appState.status === Status.INVALID_TOKEN}
           <div class="state-container">
             {#if appState.status === Status.INVALID_TOKEN}
-              <p class="text-destructive">Invalid Mod.io token</p>
+              <p class="text-destructive">{appState.message}</p>
             {/if}
             <form method="POST" use:enhance>
               <Form.Field {form} name="token">

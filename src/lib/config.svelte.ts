@@ -29,14 +29,11 @@ class Config {
   }
 
   async load() {
-    console.log('Loading config');
     appState.status = Status.LOADING;
     appState.message = 'Loading config';
 
     if (!(await doesTableExist('config')) || !(await getConfig())) {
       appState.firstLaunch = true;
-      console.log('Initializing config');
-
       await migrateToLatest();
       this.appConfig = await getConfig();
 
@@ -50,7 +47,8 @@ class Config {
     }
 
     if (!this.appConfig?.token) {
-      appState.status = Status.NO_TOKEN;
+      appState.status = Status.INVALID_TOKEN;
+      appState.message = 'Missing Mod.io token';
       return false;
     }
 

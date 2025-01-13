@@ -9,7 +9,11 @@ export const loadApp = async () => {
   console.log('Initializing app');
 
   if (!(await config.load())) return;
-  if (!(await fetchMe())) return (appState.status = Status.INVALID_TOKEN);
+  if (!(await fetchMe())) {
+    appState.status = Status.INVALID_TOKEN;
+    appState.message = 'Invalid Mod.io token';
+    return;
+  }
 
   appState.status = Status.LOADED;
 };
