@@ -1,15 +1,16 @@
 <script lang="ts">
-  import * as Sidebar from '$components/ui/sidebar';
+  import { useSidebar } from '$lib/components/ui/sidebar';
   import { Button } from '$components/ui/button';
   import { Close, Fullscreen, FullscreenExit, Minimize } from '@o7/icon/material';
-  import { House } from '@o7/icon/lucide';
+  import { House, PanelLeftClose, PanelLeftOpen } from '@o7/icon/lucide';
   import { getCurrentWindow } from '@tauri-apps/api/window';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
 
+  const sidebar = useSidebar();
+
   const Window = getCurrentWindow();
   let maximized = $state(false);
-
   export const resize = async () => {
     maximized = await Window.isMaximized();
   };
@@ -24,9 +25,15 @@
 >
   <div class="col-span-2 ml-2 flex items-center space-x-0.5 *:size-8 text-muted-foreground"
        data-tauri-drag-region>
-    <Sidebar.Trigger />
-    <Button size="icon" variant="ghost" class={{"text-header-foreground": page.url.pathname !== "/" }} href="/">
-      <House size="16" />
+    <Button variant="ghost" onclick={() => sidebar.toggle()}>
+      {#if sidebar.open}
+        <PanelLeftClose size="20" />
+      {:else}
+        <PanelLeftOpen size="20" />
+      {/if}
+    </Button>
+    <Button variant="ghost" class={{"text-header-foreground": page.url.pathname !== "/" }} href="/">
+      <House size="20" />
     </Button>
   </div>
   <p
