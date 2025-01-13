@@ -1,3 +1,3 @@
-import AppSidebar from './app-sidebar.svelte';
+import Sidebar from './Sidebar.svelte';
 
-export { AppSidebar };
+export { Sidebar };

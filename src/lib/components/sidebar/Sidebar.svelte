@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Sidebar from '$components/ui/sidebar';
-  import UserMenu from './user-menu.svelte';
-  import GameMenu from './game-menu.svelte';
+  import UserMenu from './UserMenu.svelte';
+  import GameMenu from './GameMenu.svelte';
   import type { ComponentProps } from 'svelte';
 
   let {
