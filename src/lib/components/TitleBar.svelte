@@ -2,8 +2,10 @@
   import * as Sidebar from '$components/ui/sidebar';
   import { Button } from '$components/ui/button';
   import { Close, Fullscreen, FullscreenExit, Minimize } from '@o7/icon/material';
+  import { House } from '@o7/icon/lucide';
   import { getCurrentWindow } from '@tauri-apps/api/window';
   import { onMount } from 'svelte';
+  import { page } from '$app/state';
 
   const Window = getCurrentWindow();
   let maximized = $state(false);
@@ -20,9 +22,12 @@
   class="grid fixed h-(--header-height) top-0 left-0 w-full grid-cols-5 items-center border-b z-20 bg-header-background text-header-foreground"
   data-tauri-drag-region
 >
-  <div class="col-span-2 ml-2 flex items-center gap-1"
+  <div class="col-span-2 ml-2 flex items-center space-x-0.5 *:size-8 text-muted-foreground"
        data-tauri-drag-region>
     <Sidebar.Trigger />
+    <Button size="icon" variant="ghost" class={{"text-header-foreground": page.url.pathname !== "/" }} href="/">
+      <House size="16" />
+    </Button>
   </div>
   <p
     class="text-muted pointer-events-none justify-self-center text-sm"
